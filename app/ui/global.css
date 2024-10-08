@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@layer tailwind-base, primereact, tailwind-utilities;
+
+/* IMPORTANT: In "styled" mode you must add the PrimeReact Theme here. Do NOT include in "unstyled" mode */
+@import 'primereact/resources/themes/lara-light-blue/theme.css' layer(primereact);
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+.custom-tabmenu .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+  @apply text-sm; /* Tailwind utility for large text, adjust as needed */
+}
+
+.custom-steps .p-steps .p-steps-item .p-menuitem-link .p-steps-title{
+  @apply text-xs font-bold; /* Adjust the size as needed */
+}
+
+.custom-select .p-dropdown .p-dropdown-label .p-dropdown-panel .p-dropdown-items-wrapper .p-dropdown-item {
+  @apply text-xs
+}
+
+.select-item .p-dropdown-items .p-dropdown-item .p-dropdown-item-text{
+  @apply text-xs
+}
+
+.custom-dropdown .p-dropdown-panel .p-dropdown-item {
+  @apply text-xs
+}
