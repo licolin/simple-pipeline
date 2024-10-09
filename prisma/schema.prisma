@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model python_scripts {
+  id             Int       @id @default(autoincrement())
+  script_name    String?   @db.VarChar(255)
+  script_content String?
+  create_time    DateTime? @default(now()) @db.Timestamp(6)
+  update_time    DateTime? @default(now()) @db.Timestamp(6)
+  create_user    String?   @db.VarChar(255)
+  update_user    String?   @db.VarChar(255)
+  description    String?
+  params         String?
+}
+
+model pipelines {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(255)
+  creator     String?   @db.VarChar(255)
+  create_time DateTime? @default(now()) @db.Timestamp(6)
+  active      Int?      @default(1) @db.SmallInt
+  description String?
+  nodes       String?
+  edges       String?
+  allparams   String?
+}
+
+model customers {
+  id        String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name      String @db.VarChar(255)
+  email     String @db.VarChar(255)
+  image_url String @db.VarChar(255)
+}
+
+model invoices {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  customer_id String   @db.Uuid
+  amount      Int
+  status      String   @db.VarChar(255)
+  date        DateTime @db.Date
+}
+
+model processes {
+  id          String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title       String @db.VarChar(255)
+  description String
+  process_id  Int    @default(autoincrement())
+}
+
+model revenue {
+  month   String @unique @db.VarChar(4)
+  revenue Int
+}
+
+model users {
+  id       String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name     String @db.VarChar(255)
+  email    String @unique
+  password String
+}
+
+model t_file_management {
+  id          Int       @id @default(autoincrement())
+  filename    String    @db.VarChar(255)
+  creator     String    @db.VarChar(255)
+  updater     String?   @db.VarChar(255)
+  create_time DateTime? @default(now()) @db.Timestamp(6)
+  update_time DateTime? @default(now()) @db.Timestamp(6)
+  systemid    Int
+  model       Boolean?
+  content     String?
+  // Relation to t_system_info
+  system      t_system_info @relation(fields: [systemid], references: [id])
+}
+
+model t_system_info {
+  id          Int    @id @default(autoincrement())
+  system_name String @unique @db.VarChar(255)
+  // Relation to t_file_management
+  files       t_file_management[]
+}
+
+model t_pipeline_execution {
+  pipeline_id Int?
+  exec_info   String?
+  executor    String?   @db.VarChar(255)
+  start_time  DateTime? @db.Timestamp(6)
+  end_time    DateTime? @db.Timestamp(6)
+  status      String?   @db.VarChar(50)
+  exec_id     String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id          Int       @id @default(autoincrement())
+}
+
+model t_config {
+  id          Int   @id @default(autoincrement())
+  pipeline_id Int   @unique
+  config      Json?
+}
