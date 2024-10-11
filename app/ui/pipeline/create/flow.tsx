@@ -35,7 +35,7 @@ interface FlowProps {
     node: Node[];
     edge: Edge[];
     id: string;
-    allParams: { [key: string]: { type: string, name: string, value: string, in_out: string }[] };
+    allParams: { [key: string]: { type: string, name: string, value: string, in_out: string,source_id:string }[] };
 }
 
 function getRandomEightDigitString(): string {
@@ -169,15 +169,6 @@ export default function FlowComponent({ node, edge, id, allParams }: FlowProps) 
 
     return (
         <div>
-            {/*{showDialog && (*/}
-            {/*    <div*/}
-            {/*        className={`fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-gray-800 text-white px-4 py-1 rounded-md transition-opacity duration-1000 ${*/}
-            {/*            dialogSuccess ? 'bg-green-600' : 'bg-red-600'*/}
-            {/*        }`}*/}
-            {/*    >*/}
-            {/*        {dialogMessage}*/}
-            {/*    </div>*/}
-            {/*)}*/}
             <Dialog
                 message={dialogMessage}
                 isVisible={showDialog}
@@ -231,14 +222,6 @@ export default function FlowComponent({ node, edge, id, allParams }: FlowProps) 
                     <Background gap={8} size={2} variant={BackgroundVariant.Lines}/>
                 </ReactFlow>
             </div>
-            {/*<button*/}
-            {/*    onClick={toggleDrawer}*/}
-            {/*    className="absolute right-[20px] top-1/2 bg-blue-500 text-blue py-1 px-2 rounded"*/}
-            {/*>*/}
-            {/*    {isDrawerOpen ? 'Close' : 'Open'}*/}
-            {/*</button>*/}
-
-            {/* Drawer for ParamsTable */}
             <div
                 className={`fixed right-0 top-0 h-full z-10 w-min-[800px] bg-white shadow-lg transform transition-transform ${
                     isDrawerOpen ? 'translate-x-0' : 'translate-x-full'

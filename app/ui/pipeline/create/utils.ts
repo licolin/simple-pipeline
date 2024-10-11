@@ -21,6 +21,7 @@ export function transformData(
         }));
 
         return {
+            id:key,
             code: reference_map[key], // Corrected this line
             name: reference_map[key], // Corrected this line
             states,

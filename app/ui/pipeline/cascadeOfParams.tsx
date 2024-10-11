@@ -4,21 +4,23 @@ import React, {useEffect, useRef, useState} from 'react';
 export interface TransformedOption {
     code: string;
     name: string;
+    id:string;
     children?: TransformedOption[];
-    states?: { name: string; code: string }[];
+    states?: { name: string; code: string;id:string }[];
 }
 
 // Props for CascadeSelect
 interface Props {
     options: TransformedOption[];
     placeholder?: string;
-    onChange?: (selectedValue: string, node_id: string, name_of_param: string, in_out: string, param_type: string, node_real_id: string) => void;
+    onChange?: (selectedValue: string, node_id: string, name_of_param: string, in_out: string, param_type: string, node_real_id: string,selected_id:string) => void;
     node_id: string;
     name_of_param: string;
     in_out: string;
     param_type: string;
     node_real_id: string;
     default_value: string;
+    // selected_id:string;
 }
 
 // Define findOption outside the component
@@ -60,9 +62,10 @@ const CascadeSelect: React.FC<Props> = ({
     const [isOpen, setIsOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const [optionInfo, setOptionInfo] = useState("");
+    const [Id,setId]=useState("");
 
     console.log("option info is "+JSON.stringify(options));
-    const handleSelect = (name: string, level: number) => {
+    const handleSelect = (name: string, level: number,id:string) => {
         let tmp_data = [...options];
         const selectedOption = findOption(cascadeData[level], name)
         // console.log("cascadeData option "+JSON.stringify(cascadeData));
@@ -82,7 +85,9 @@ const CascadeSelect: React.FC<Props> = ({
 
             if(newSelectedCodes.length > 0) {
                 if(newSelectedCodes.length === 1){
+                    console.log("selected value is:"+id);
                     setOptionInfo(newSelectedCodes[0]);
+                    setId(id);
                 }else if(newSelectedCodes.length===2){
                     setOptionInfo(newSelectedCodes[0] + ">" + newSelectedCodes[1]);
                 }
@@ -112,9 +117,10 @@ const CascadeSelect: React.FC<Props> = ({
 
             // Notify parent component of selected codes
             if (onChange) {
+                console.log("id info is "+Id);
                 console.log("xxxxxx " + name);
                 console.log("yyyyyy " + selectedCodes);
-                onChange(selectedCodes[0]+">"+name, node_id, name_of_param, in_out, param_type, node_real_id);
+                onChange(selectedCodes[0]+">"+name, node_id, name_of_param, in_out, param_type, node_real_id,Id);
             }
         }
     };
@@ -202,7 +208,7 @@ const CascadeSelect: React.FC<Props> = ({
                             {optionsLevel.map((option) => (
                                 <button
                                     key={option.code + getRandomEightDigitString()}
-                                    onClick={() => handleSelect(option.name, level)}
+                                    onClick={() => handleSelect(option.name, level,option.id)}
                                     className="flex items-center justify-between px-4 py-1 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900  w-full text-left"
                                     role="menuitem"
                                 >

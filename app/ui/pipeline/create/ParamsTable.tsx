@@ -13,7 +13,8 @@ interface ParamsTableProps {
             type: string,
             name: string,
             value: string,
-            in_out: string
+            in_out: string,
+            source_id:string
         }[]
     };
 }
@@ -75,7 +76,8 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
             type: string,
             name: string,
             value: string,
-            in_out: string
+            in_out: string,
+            source_id:string,
         }[]
     }>(allParams);
     const [sequences,setSequences] = useState([]);
@@ -91,6 +93,8 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
     function getDataOptions(id:string){
         const selected_keys:Array<string> = getElementsBeforeParam(sequences,id);
         const optionMaps: { [nodeId: string]: string[] } = getSelectedKeys(lastMapping,selected_keys);
+        console.log("optionMaps:"+JSON.stringify(optionMaps));
+        console.log("idClassName:"+JSON.stringify(idClassName));
         return transformData(optionMaps,idClassName)
     }
 
@@ -166,7 +170,7 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
         });
     };
 
-    function updateValue(id: string, name: string, type: string, in_out: string, newValue: string) {
+    function updateValue(id: string, name: string, type: string, in_out: string, newValue: string,selected_id:string) {
         if (paramStates.hasOwnProperty(id)) {
             paramStates[id].forEach((item) => {
                 console.log("item.name = " + item.name);
@@ -174,19 +178,21 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
                 console.log("item.in_out = " + item.in_out);
                 if (item.name === name && item.type === type && item.in_out === in_out) {
                     item.value = newValue;
+                    item.source_id = selected_id;
                 }
             });
         } else {
             console.log(`ID ${id} not found in the data`);
         }
     }
-    function handleSelected(value: string, nodeId: string,paramName:string,in_out:string,param_type:string,node_real_id:string){
+    function handleSelected(value: string, nodeId: string,paramName:string,in_out:string,param_type:string,node_real_id:string,selected_id:string){
         console.log("value "+value);
         console.log("node_real_id "+node_real_id);
         console.log("paramName "+paramName);
         console.log("param_type "+param_type);
         console.log("in_out "+in_out);
-        updateValue(node_real_id,paramName,param_type,in_out,value)
+        console.log("selected id "+selected_id);
+        updateValue(node_real_id,paramName,param_type,in_out,value,selected_id)
     }
 
     const handleSubmit = async () => {
@@ -197,6 +203,7 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
             type: "updatePipeline",
         };
         try {
+            console.log("out information is "+JSON.stringify(formData.paramStates));
             const response = await fetch('/api/pipeline', {
                 method: 'POST',
                 headers: {
@@ -219,13 +226,6 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
                     success: true,
                     showDialog: true,
                 };
-                // console.log('Data submitted successfully:', ret.data);
-                // setDialogMessage('提交成功');
-                // setDialogSuccess(true);
-                // setShowDialog(true);
-                // setTimeout(() => {
-                //     setShowDialog(false);
-                // }, 1500);
             } else {
                 console.error('Submission failed:', ret.error);
                 return {
@@ -233,12 +233,6 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
                     success: false,
                     showDialog: true,
                 };
-                // setDialogMessage('提交失败: ' + ret.error);
-                // setDialogSuccess(false);
-                // setShowDialog(true);
-                // setTimeout(() => {
-                //     setShowDialog(false);
-                // }, 1500);
             }
         } catch (error) {
             console.error('An error occurred:', error);
@@ -247,12 +241,6 @@ const ParamsTable = forwardRef<ParamsTableRef, ParamsTableProps>(({nodes, edges,
                 success: false,
                 showDialog: true,
             };
-            // setDialogMessage('错误信息: ' + error);
-            // setDialogSuccess(false);
-            // setShowDialog(true);
-            // setTimeout(() => {
-            //     setShowDialog(false);
-            // }, 1500);
         }
 
     };
