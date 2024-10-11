@@ -53,5 +53,6 @@ export function getSelectedKeys(
         }
     });
 
+    console.log("result:", JSON.stringify(result));
     return result;
 }

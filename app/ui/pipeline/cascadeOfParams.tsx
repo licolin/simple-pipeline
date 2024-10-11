@@ -61,7 +61,7 @@ const CascadeSelect: React.FC<Props> = ({
     const ref = useRef<HTMLDivElement>(null);
     const [optionInfo, setOptionInfo] = useState("");
 
-    // console.log("option info is "+JSON.stringify(options));
+    console.log("option info is "+JSON.stringify(options));
     const handleSelect = (name: string, level: number) => {
         let tmp_data = [...options];
         const selectedOption = findOption(cascadeData[level], name)

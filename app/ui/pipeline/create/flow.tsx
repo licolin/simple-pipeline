@@ -39,7 +39,7 @@ interface FlowProps {
 }
 
 function getRandomEightDigitString(): string {
-    const chars = '0123456789';
+    const chars = '0123456789abcdef';
     let result = '';
     for (let i = 0; i < 8; i++) {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -87,7 +87,8 @@ export default function FlowComponent({ node, edge, id, allParams }: FlowProps) 
     useEffect(() => {
         setNodes((nodes) =>
             nodes.map((node) => {
-                // console.log("type of nodes "+ JSON.stringify(nodes));
+                /**/console.log("type of nodes "+ JSON.stringify(nodes));
+                const parts: string[] = node.id?.split("__");
                 return {
                     ...node,
                     type: "custom",
@@ -95,7 +96,9 @@ export default function FlowComponent({ node, edge, id, allParams }: FlowProps) 
                         label: (
                             <div>
                                 <div className="font-bold">{node.className}</div>
-                                <div className="text-xs">{node.id}</div>
+                                {/*<div className="text-xs">{node.id}</div>*/}
+                                <div className="text-xs py-1">流程ID:{parts[0]}</div>
+                                <div className="text-xs py-1">随机ID:{parts[1]}</div>
                             </div>
                         ),
                     },
@@ -103,7 +106,6 @@ export default function FlowComponent({ node, edge, id, allParams }: FlowProps) 
             })
         );
     }, []);
-
 
 
     const onDrop = useCallback(
@@ -135,8 +137,9 @@ export default function FlowComponent({ node, edge, id, allParams }: FlowProps) 
                 data: {
                     label: (
                         <div>
-                            <div className="font-bold">{name}</div>
-                            <div className="text-xs">{count}</div>
+                            <div className="font-bold py-1">{name}</div>
+                            <div className="text-xs py-1">流程ID:{script_id}</div>
+                            <div className="text-xs py-1">随机ID:{count}</div>
                         </div>
                     )
                 },

@@ -107,6 +107,7 @@ const TreeNodeComponent: React.FC<TreeNodeProps> = ({ node }) => {
     const toggleExpand = () => setIsExpanded(!isExpanded);
 
     const handleDragStart = (e: React.DragEvent) => {
+        console.log("node.id "+node.id);
         e.dataTransfer.setData('application/reactflow', node.script_name);
         e.dataTransfer.setData('scriptId', node.id);
         e.dataTransfer.effectAllowed = 'all';

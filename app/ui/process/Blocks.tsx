@@ -115,7 +115,7 @@ export default function SportCard({ sport }: { sport: SportProps }) {
         <Link
             key={sport.id}
             href={`/dashboard/processes/${sport.id}/edit`}
-            className="flex flex-col justify-between overflow-hidden text-left transition-shadow duration-200 bg-white rounded shadow-md group hover:shadow-2xl relative"
+            className="flex flex-col border-solid border  border-indigo-300 justify-between overflow-hidden text-left transition-shadow duration-200 bg-white rounded shadow-md group hover:shadow-2xl relative"
             // onClick={handleClick}
         >
             <div className="p-3">
