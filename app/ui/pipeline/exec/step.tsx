@@ -14,6 +14,7 @@ interface StepIndicatorProps {
 
 
 const StepIndicator: React.FC<StepIndicatorProps> = ({ steps }) => {
+    console.log("steps information "+JSON.stringify(steps));
     return (
         <div className="flex items-center justify-between py-4 mx-2">
             {steps.map((step, index) => (
