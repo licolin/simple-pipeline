@@ -33,14 +33,29 @@ export const { handlers,auth, signIn, signOut } = NextAuth({
 
         // console.log("nextAuth action!");
         if (parsedCredentials.success) {
+          // const user = "debug";
           const { email, password } = parsedCredentials.data;
 
           const user = await getUser(email);
-          console.log("user info is : " + user);
+
+          // const user: User = {
+          //   id: "123",
+          //   name: "John Doe",
+          //   email: "john.doe@example.com",
+          //   password: "securePassword123"
+          // };
+
+
           if (!user) return null;
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
-          if (passwordsMatch) return user;
+
+
+          // code for debugging
+          // const user = email;
+          // const passwordsMatch = true;
+          // user = "debug";
+          if (passwordsMatch) return  user;
         }
 
         console.log('Invalid credentials');

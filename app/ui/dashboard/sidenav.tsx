@@ -48,6 +48,11 @@ const menuItems: MenuItem[] = [
         list: [],
         href: '/dashboard/management',
     },
+    {
+        name: '代码生成',
+        list: [],
+        href: '/dashboard/chat',
+    },
     // {
     //     name: '文件管理',
     //     href: "",
