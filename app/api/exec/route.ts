@@ -4,6 +4,7 @@ import {PrismaClient} from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
+    // /api/exec?id=${id}
     const url = new URL(request.url);
 
     const id:string | null = url.searchParams.get('id');

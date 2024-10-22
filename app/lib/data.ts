@@ -7,7 +7,7 @@ import {
     LatestInvoiceRaw,
     Revenue,
     User,
-    PythonScript, ProcessTable, Pipelines, NodeEdge,
+    PythonScript, ProcessTable, Pipelines, NodeEdge,Posts
 } from './definitions';
 import {formatCurrency} from './utils';
 import {unstable_noStore as noStore} from 'next/cache';
@@ -30,6 +30,23 @@ export async function fetchRevenue() {
 
         // console.log('Data fetch completed after 3 seconds.');
 
+        return rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch revenue data.');
+    }
+}
+
+export async function fetchPostTitle(
+    username: string,
+) {
+    noStore();
+    try {
+        const { rows } = await pool.query<Posts>(`SELECT title, username, MAX(insert_time) AS latest_time
+            FROM t_posts 
+            WHERE username = $1
+            GROUP BY title, username
+            ORDER BY latest_time DESC LIMIT 15`,[username]);
         return rows;
     } catch (error) {
         console.error('Database Error:', error);

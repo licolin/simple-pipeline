@@ -124,3 +124,11 @@ export interface FormErrors {
   name?: string[];
   description?: string[];
 }
+
+export type Posts = {
+  id: number;
+  title: string;
+  username: string;
+  insert_time: Date;
+  message: string;
+}

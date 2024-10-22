@@ -102,3 +102,11 @@ model t_config {
   pipeline_id Int   @unique
   config      Json?
 }
+
+model t_posts {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  username    String    @db.VarChar(255)
+  message     Json      @db.Json
+  insert_time DateTime? @default(now()) @db.Timestamp(6)
+}
