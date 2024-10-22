@@ -172,6 +172,9 @@ const Chatbot: React.FC = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const chatBoxRef = useRef<HTMLDivElement>(null); // For scrolling control
     const [isHovered, setIsHovered] = useState(false);
+    const [isHovered_1, setIsHovered_1] = useState(false);
+    const [isHovered_2, setIsHovered_2] = useState(false);
+    const [isHovered_3, setIsHovered_3] = useState(false);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -255,17 +258,36 @@ const Chatbot: React.FC = () => {
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
             {sidebarOpen && (
-                <div className="w-1/5 bg-white shadow-md px-4 py-2 flex justify-between relative">
-                    <span onMouseEnter={() => setIsHovered(true)}
-                          onMouseLeave={() => setIsHovered(false)}
-                          className="relative cursor-pointer"> <LuPanelLeftClose onClick={() => setSidebarOpen(!sidebarOpen)} size={20}/> </span>
-                    {isHovered && (
-                        <span className="absolute bottom-full mb-1 px-2 py-1 text-xs text-white bg-gray-600 rounded-md z-10">
-                    关闭侧边栏
-                    </span>
-                    )}
-                    <span> <TbNewSection size={20}/> </span>
+                <div className="w-1/5 bg-white shadow-md ">
+                    <div className="w-full px-4 py-2 flex justify-between relative overflow-visible">
+                            <span onMouseEnter={() => setIsHovered_2(true)}
+                                  onMouseLeave={() => setIsHovered_2(false)}
+                                  className="cursor-pointer px-1 py-[2px] relative hover:bg-gray-300 rounded">
+                                <LuPanelLeftClose onClick={() => setSidebarOpen(false)} size={20}/>
+                                {isHovered_2 && (
+                                    <span
+                                        className="absolute top-full left-0 mt-[2px] bg-gray-600 text-white text-xs px-1 py-1 rounded whitespace-nowrap">
+                                        关闭
+                                    </span>
+                                )}
+                            </span>
+
+                        <span onMouseEnter={() => setIsHovered_3(true)}
+                              onMouseLeave={() => setIsHovered_3(false)}
+                              className="hover:bg-gray-300 rounded px-1 py-[2px]">
+                                <TbNewSection size={20}/>
+                                {isHovered_3 && (
+                                    <span
+                                        className="absolute left-full ml-1 top-1/2 transform -translate-y-1/2 bg-gray-600 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                                            新建会话
+                                        </span>
+                                )}
+                            </span>
+                    </div>
+                    <div>yyyyyyy</div>
+                    <div>xxxxxxxxxxx</div>
                 </div>
+
             )}
 
 
@@ -274,20 +296,30 @@ const Chatbot: React.FC = () => {
                 className={`flex-grow flex flex-col items-center bg-gray-100 py-2 h-screen transition-all duration-300 ${sidebarOpen ? 'w-4/5' : 'w-full'}`}>
                 {/* part one */}
                 {!sidebarOpen && (
-                    <div className="w-full px-2 flex justify-start">
-                        <span className="px-2 relative cursor-pointer"
-                              onMouseEnter={() => setIsHovered(true)}
-                              onMouseLeave={() => setIsHovered(false)}> <LuPanelRightClose onClick={() => setSidebarOpen(!sidebarOpen)}
-                                                                  size={20}/> </span>
-                        {isHovered && (
-                            <span className="absolute bottom-full mb-1 px-2 py-1 text-xs text-white bg-gray-600 rounded-md z-10">
-                    关闭侧边栏
-                    </span>
-                        )}
-                        <span className="px-1"> <TbNewSection size={20}/> </span>
+                    <div className="w-full px-2 flex justify-start items-center relative">
+                            <span className="px-1 py-[2px] cursor-pointer relative hover:bg-gray-300 rounded"
+                                  onMouseEnter={() => setIsHovered(true)}
+                                  onMouseLeave={() => setIsHovered(false)}>
+                                <LuPanelRightClose onClick={() => setSidebarOpen(true)} size={20}/>
+                                {isHovered && (
+                                    <span className="absolute top-full left-0 mt-[2px] bg-gray-600 text-white text-xs px-1 py-1 rounded whitespace-nowrap">
+                                        展开
+                                    </span>
+                                )}
+                            </span>
+                            <span className="px-1 py-[2px] cursor-pointer relative hover:bg-gray-300 rounded"
+                                  onMouseEnter={() => setIsHovered_1(true)}
+                                  onMouseLeave={() => setIsHovered_1(false)}>
+                                <TbNewSection size={20}/>
+                                {isHovered_1 && (
+                                    <span className={`absolute left-full ml-1 top-1/2 transform -translate-y-1/2 bg-gray-600 text-white text-xs px-2 py-1 rounded whitespace-nowrap transition-all duration-800 ease-in-out ${isHovered_1 ? 'opacity-100' : 'opacity-0'}`}>
+                                        新建会话
+                                    </span>
+                                )}
+                            </span>
                     </div>
                 )}
-                <div className={`w-full max-w-4xl rounded flex flex-col h-5/6 ${!sidebarOpen? 'py-0':'py-3'}`}>
+                <div className={`w-full max-w-4xl rounded flex flex-col h-5/6 ${!sidebarOpen ? 'py-0' : 'py-3'}`}>
                     <h1 className="text-md font-bold mb-2">会话</h1>
 
                     {/* Chat messages container */}
