@@ -7,6 +7,8 @@ import {LuPanelRightClose} from "react-icons/lu";
 import {TbNewSection} from "react-icons/tb";
 import {useSession} from "next-auth/react";
 import {insertMessage} from "@/app/lib/req";
+import { FaDatabase } from "react-icons/fa6";
+import { BiBroadcast } from "react-icons/bi";
 
 interface Message {
     role: 'user' | 'assistant';
@@ -71,7 +73,6 @@ const Chatbot: React.FC = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Response:', data);
                 const parsedMessages: Message[] = data.data.map((item:{ message: string }) =>
                     JSON.parse(item.message)
                 );
@@ -213,12 +214,23 @@ const Chatbot: React.FC = () => {
                     </div>
                     {/* sidebar list get from postgresql */}
                     <div>
+                        <div className="flex ml-3 hover:cursor-pointer">
+                            <span className="py-1"><FaDatabase size={15}/></span>
+                            <span className="text-xs font-bold py-1 mx-1">业务数据</span>
+                            {/*<span className="text-xs font-bold py-2 mx-1">业务请求</span>*/}
+                        </div>
+                        <div className="flex ml-3 mb-1 hover:cursor-pointer">
+                            <span className="py-1"><BiBroadcast size={15}/></span>
+                            {/*<span className="text-xs font-bold py-2 mx-1">业务数据</span>*/}
+                            <span className="text-xs font-bold py-1 mx-1">业务请求</span>
+                        </div>
+                        <span className="text-xs font-bold ml-1">历史记录</span>
                         {conversations.length > 0 ? (
                             conversations.map((conversation, index) => (
                                 <div
                                     key={`${conversation.title}-${conversation.username}-${index}`} // Generate unique key
                                     className="mx-1 px-[8px] py-[3px] cursor-pointer hover:bg-gray-200 text-sm font-medium hover:rounded-md"
-                                    onClick={()=>handleConversationClick(conversation.title)}
+                                    onClick={() => handleConversationClick(conversation.title)}
                                 >
                                     {conversation.title}
                                 </div>
