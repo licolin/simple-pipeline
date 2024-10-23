@@ -6,7 +6,7 @@ import {LuPanelLeftClose} from "react-icons/lu";
 import {LuPanelRightClose} from "react-icons/lu";
 import {TbNewSection} from "react-icons/tb";
 import {useSession} from "next-auth/react";
-import {fetchPostTitle} from "@/app/lib/data";
+import {insertMessage} from "@/app/lib/req";
 
 interface Message {
     role: 'user' | 'assistant';
@@ -47,8 +47,6 @@ const Chatbot: React.FC = () => {
             const data = await response.json();
 
             if (data.success) {
-                // console.log('Conversations:', data.data);
-                // Use the data in your component state
                 setConversations(data.data);
             } else {
                 console.error('Failed to fetch conversations.');
@@ -57,6 +55,35 @@ const Chatbot: React.FC = () => {
             console.error('Error fetching conversations:', error);
         }
     };
+
+    const handleConversationClick = async (title: string) => {
+        try {
+            const response = await fetch('/api/chat/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: session?.user?.email, // Sending username
+                    title:  title,   // Sending conversation title
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Response:', data);
+                const parsedMessages: Message[] = data.data.map((item:{ message: string }) =>
+                    JSON.parse(item.message)
+                );
+                setMessages(parsedMessages);
+            } else {
+                console.error('Error:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
+        }
+    };
+
 
 
     useEffect(() => {
@@ -95,19 +122,13 @@ const Chatbot: React.FC = () => {
 
             setMessages((prevMessages) => [...prevMessages, botMessage]);
 
-            const insert_ret = await fetch('/api/chat/insert', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: session?.user?.email,
-                        title: title,
-                        message: botMessage,
-                    })
-                }
-            )
-            console.log("insert_ret " + JSON.stringify(insert_ret));
+            if(session?.user?.email){
+                const ret_req = await insertMessage(session?.user?.email, title, userMessage);
+                const ret_resp = await insertMessage(session?.user?.email, title, botMessage);
+                console.log("req info is " + JSON.stringify(ret_req));
+                console.log("resp info is " + JSON.stringify(ret_resp));
+            }
+
         } catch (error) {
             console.error('Error sending message:', error);
         } finally {
@@ -196,13 +217,14 @@ const Chatbot: React.FC = () => {
                             conversations.map((conversation, index) => (
                                 <div
                                     key={`${conversation.title}-${conversation.username}-${index}`} // Generate unique key
-                                    className="px-[10px] py-[3px] cursor-pointer hover:bg-gray-200 text-sm"
+                                    className="mx-1 px-[8px] py-[3px] cursor-pointer hover:bg-gray-200 text-sm font-medium hover:rounded-md"
+                                    onClick={()=>handleConversationClick(conversation.title)}
                                 >
                                     {conversation.title}
                                 </div>
                             ))
                         ) : (
-                            <div>No conversations found.</div>
+                            <div className="opacity-50 px-[10px] text-xs">没有历史会话记录</div>
                         )}
                     </div>
                     {/*<div>xxxxxxxxxxx</div>*/}
