@@ -7,8 +7,8 @@ import {LuPanelRightClose} from "react-icons/lu";
 import {TbNewSection} from "react-icons/tb";
 import {useSession} from "next-auth/react";
 import {insertMessage} from "@/app/lib/req";
-import { FaDatabase } from "react-icons/fa6";
-import { BiBroadcast } from "react-icons/bi";
+import {FaDatabase} from "react-icons/fa6";
+import {BiBroadcast} from "react-icons/bi";
 
 interface Message {
     role: 'user' | 'assistant';
@@ -67,13 +67,13 @@ const Chatbot: React.FC = () => {
                 },
                 body: JSON.stringify({
                     username: session?.user?.email, // Sending username
-                    title:  title,   // Sending conversation title
+                    title: title,   // Sending conversation title
                 }),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                const parsedMessages: Message[] = data.data.map((item:{ message: string }) =>
+                const parsedMessages: Message[] = data.data.map((item: { message: string }) =>
                     JSON.parse(item.message)
                 );
                 setMessages(parsedMessages);
@@ -86,14 +86,12 @@ const Chatbot: React.FC = () => {
     };
 
 
-
     useEffect(() => {
         if (session?.user?.email) {
             // Pass the logged-in user's email (or username) to the API request
             fetchConversations(session.user.email);
         }
     }, [session]);
-
 
 
     const sendMessage = async () => {
@@ -123,7 +121,7 @@ const Chatbot: React.FC = () => {
 
             setMessages((prevMessages) => [...prevMessages, botMessage]);
 
-            if(session?.user?.email){
+            if (session?.user?.email) {
                 const ret_req = await insertMessage(session?.user?.email, title, userMessage);
                 const ret_resp = await insertMessage(session?.user?.email, title, botMessage);
                 console.log("req info is " + JSON.stringify(ret_req));
@@ -162,15 +160,34 @@ const Chatbot: React.FC = () => {
     }, [messages]);
 
     const renderMessageContent = (content: string) => {
+        // console.log("msg info");
+
         const parts = content.split(/(```[^`]+```)/).filter(Boolean);
         return parts.map((part, index) => {
             const isCodeBlock = part.startsWith('```') && part.endsWith('```');
             if (isCodeBlock) {
                 let code = part.replace(/```/g, '').trim();
-                const language = 'python';
-                if (code.startsWith("python")) {
-                    code = code.substring(6).trim();
+                let language: string = '';
+                const languageMap: { [key: string]: string } = {
+                    'python': 'python',
+                    'javascript': 'javascript',
+                    'typescript': 'typescript',
+                    'java': 'java',
+                    'json': 'json',
+                    'sql': 'sql',
+                    'cpp': 'cpp',
+                    'c#': 'csharp',
+                    'csharp': 'csharp',
+                    'c++': 'cpp',
+                };
+                for (const [key, value] of Object.entries(languageMap)) {
+                    if (code.startsWith(key)) {
+                        code = code.substring(key.length).trim();
+                        language = value;
+                        break;
+                    }
                 }
+
                 return <CodeBlock key={index} language={language} code={code}/>;
             }
             return <span className="text-sm" key={index}>{part}</span>;
