@@ -161,7 +161,7 @@ export default function Page() {
             }
         };
 
-        fetchConfig();
+        fetchConfig().then(r => {});
     }, []);
 
 
@@ -175,7 +175,7 @@ export default function Page() {
                 onClose={() => setShowDialog(false)}
             />
 
-            <div className="flex w-full">
+            <div className="flex w-full h-screen">
                 <div className="mt-2 w-4/5 pr-2">
                     <div className="mt-2 w-full h-32">
                         <div className="border border-slate-300 shadow shadow-slate-300 rounded my-2 mx-1 py-1">
@@ -223,10 +223,10 @@ export default function Page() {
 
                     </div>
                 </div>
-                <div className="mt-2 w-1/5 ml-2 mr-2">
+                <div className="mt-2 w-1/5 ml-2 mr-2 h-full">
                     <span className="text-xs font-bold">执行历史记录</span>
                     <div
-                        className="w-full min-h-[568px] border border-slate-300 shadow shadow-slate-300 rounded font-sans">
+                        className="w-full h-5/6 border border-slate-300 shadow shadow-slate-300 rounded font-sans">
                         {details.map((detail, index) => (
                                 <div
                                     key={detail.id}
@@ -234,7 +234,7 @@ export default function Page() {
                                         currentID === index
                                             ? "bg-red-200 hover:bg-red-300"
                                             : "hover:bg-slate-200"
-                                    } rounded-sm p-1 cursor-pointer`}
+                                    } rounded-md p-1 cursor-pointer`}
                                 >
               <span onClick={() => {
                   setCurrentID(index);

@@ -231,15 +231,15 @@ const Chatbot: React.FC = () => {
                     </div>
                     {/* sidebar list get from postgresql */}
                     <div>
-                        <div className="flex ml-3 hover:cursor-pointer">
+                        <div className="flex px-2 hover:cursor-pointer hover:bg-gray-300 mx-1 hover:rounded-md">
                             <span className="py-1"><FaDatabase size={15}/></span>
-                            <span className="text-xs font-bold py-1 mx-1">业务数据</span>
+                            <span className="text-xs font-bold py-1 mx-1 ">业务数据</span>
                             {/*<span className="text-xs font-bold py-2 mx-1">业务请求</span>*/}
                         </div>
-                        <div className="flex ml-3 mb-1 hover:cursor-pointer">
+                        <div className="flex px-2 mb-1 hover:cursor-pointer hover:bg-gray-300 mx-1 hover:rounded-md">
                             <span className="py-1"><BiBroadcast size={15}/></span>
                             {/*<span className="text-xs font-bold py-2 mx-1">业务数据</span>*/}
-                            <span className="text-xs font-bold py-1 mx-1">业务请求</span>
+                            <span className="text-xs font-bold py-1 mx-1 hover:bg-gray-300">业务请求</span>
                         </div>
                         <span className="text-xs font-bold ml-1">历史记录</span>
                         {conversations.length > 0 ? (
@@ -293,21 +293,49 @@ const Chatbot: React.FC = () => {
                     </div>
                 )}
                 <div className={`w-full max-w-4xl rounded flex flex-col h-5/6 ${!sidebarOpen ? 'py-0' : 'py-3'}`}>
-                    <h1 className="text-md font-bold mb-2">会话</h1>
+                    {/*<h1 className="text-md font-bold mb-2">会话</h1>*/}
 
-                    {/* Chat messages container */}
-                    <div ref={chatBoxRef}
-                         className="flex-grow mb-3 overflow-y-auto p-4 rounded max-w-4xl mx-auto w-full">
-                        {messages.map((msg, index) => (
-                            <div key={index} className={`my-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                                <span
-                                    className={`inline-block px-4 py-2 break-words whitespace-pre-wrap rounded ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
-                                    {renderMessageContent(msg.content)}
-                                </span>
+                    {/*/!* Chat messages container *!/*/}
+                    {/*<div ref={chatBoxRef}*/}
+                    {/*     className="flex-grow mb-3 overflow-y-auto p-4 rounded max-w-4xl mx-auto w-full">*/}
+                    {/*    {messages.map((msg, index) => (*/}
+                    {/*        <div key={index} className={`my-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>*/}
+                    {/*            <span*/}
+                    {/*                className={`inline-block px-4 py-2 break-words whitespace-pre-wrap rounded ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>*/}
+                    {/*                {renderMessageContent(msg.content)}*/}
+                    {/*            </span>*/}
+                    {/*        </div>*/}
+                    {/*    ))}*/}
+                    {/*    {loading && <div className="text-center">让小千想想...</div>}*/}
+                    {/*</div>*/}
+                    {messages.length > 0 ? (
+                        <div
+                            ref={chatBoxRef}
+                            className="flex-grow mb-3 overflow-y-auto p-4 rounded max-w-4xl mx-auto w-full"
+                        >
+                            {messages.map((msg, index) => (
+                                <div key={index} className={`my-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                                      <span
+                                          className={`inline-block px-4 py-2 break-words whitespace-pre-wrap rounded ${msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                                      >
+                                        {renderMessageContent(msg.content)}
+                                      </span>
+                                </div>
+                            ))}
+                            {loading && <div className="text-center">让我想想...</div>}
+                        </div>
+                    ) : (
+                        <div
+                            className="flex-grow flex items-center justify-center"
+                        >
+                            <div className="text-center text-gray-500 animate-fade-in">
+                                请输入想要咨询的问题
                             </div>
-                        ))}
-                        {loading && <div className="text-center">让小千想想...</div>}
-                    </div>
+                        </div>
+                    )}
+
+
+
                 </div>
 
                 {/* part two */}

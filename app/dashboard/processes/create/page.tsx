@@ -8,6 +8,12 @@ import Dialog from "@/app/ui/Dialog";
 import  TableData from "@/app/ui/process/ParamsTable";
 // import { DataTable } from 'primereact/datatable';
 import DataTable from "@/app/ui/process/ParamsTable";
+import dynamic from "next/dynamic";
+// import MonacoEditor from "@/app/components/ui/MonacoEditor";
+
+const ME = dynamic(() => import("@/app/components/ui/MonacoEditor"), {
+    ssr: false,
+});
 
 const initialData = {
     in: [
@@ -40,6 +46,7 @@ export default function Page() {
     const [showDialog, setShowDialog] = useState(false);
     const [dialogMessage, setDialogMessage] = useState('');
     const [dialogSuccess, setDialogSuccess] = useState(false);
+    const [code,setCode] = useState('');
 
     const router = useRouter();
 
@@ -49,6 +56,10 @@ export default function Page() {
         setDialogSuccess(status);
         setShowDialog(showOrNot);
     }
+
+    const handleEditorChange = (value: string | undefined, event: any) => {
+        console.log('Editor content:', value);
+    };
 
     const handleSubmit = async () => {
         if (!title || title.trim() === "") {
@@ -110,7 +121,7 @@ export default function Page() {
 
     // @ts-ignore
     return (
-        <div>
+        <div className="h-screen overflow-hidden">
             <Dialog
                 message={dialogMessage}
                 isVisible={showDialog}
@@ -118,80 +129,94 @@ export default function Page() {
                 onClose={() => setShowDialog(false)}
             />
 
-        <div className="mt-2 flex h-screen w-full">
-            <div className="h-screen w-1/2">
-                <div className="mb-0.5">
-                    <span className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">代码编辑区</span>
-                    <span className="text-xs">*</span>
+            <div className="mt-2 flex h-screen w-full">
+                <div className="h-screen w-1/2">
+                    <div className="mb-0.5">
+                        <span className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">代码编辑区</span>
+                        <span className="text-xs">*</span>
+                    </div>
+                    {/*<span className="text-xs font-semibold">代码编辑区</span>*/}
+                    {/*<CodeEditor ref={codeEditorRef} script={""}/>*/}
+                    {/*<MonacoEditor*/}
+                    {/*    value="// 在此编写您的代码..."*/}
+                    {/*    language="python"*/}
+                    {/*    onChange={handleCodeChange}*/}
+                    {/*/>*/}
+                    <ME handleChange={handleEditorChange} />
+
+
                 </div>
-                {/*<span className="text-xs font-semibold">代码编辑区</span>*/}
-                <CodeEditor ref={codeEditorRef} script={""}/>
+                <div className="pl-4 mt-1 h-screen w-1/2 text-xs mb-0.5 mx-1">
+                    <div className="flex justify-end gap-2">
+                        {/*<div className="flex w-32 gap-2">*/}
+                        <button
+                            onClick={handleSubmit}
+                            className="bg-blue-400 hover:bg-blue-500 text-white text-sm px-4 py-0.5 rounded-sm my-1 mx-1"
+                        >
+                            提交
+                        </button>
+                        <button
+                            onClick={() => router.push('/dashboard/processes')}
+                            className="ml-1 bg-blue-400 hover:bg-blue-500 text-white text-sm px-4 py-0.5 rounded-sm my-1 mx-2"
+                        >
+                            取消
+                        </button>
+                        <button
+                            onClick={() => router.push('/dashboard/processes')}
+                            className="ml-1 bg-blue-400 hover:bg-blue-500 text-white text-sm px-4 py-0.5 rounded-sm my-1 mx-2"
+                        >
+                            调试
+                        </button>
+                        {/*</div>*/}
+
+                    </div>
+                    <div className="w-full">
+                        <div className="mb-0.5">
+                            <span
+                                className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">标题</span>
+                            <span className="text-xs">*</span>
+                        </div>
+                        <input
+                            className="w-full text-xs rounded-sm shadow-sm mb-[6px] border border-gray-300 placeholder:text-gray-500"
+                            placeholder="请填写流程标题"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-0.5 mt-1">
+                        <span
+                            className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">流程描述</span>
+                        <span className="text-xs">*</span>
+                    </div>
+                    <textarea placeholder="请填写子流程描述"
+                              className="w-full h-28 bg-white shadow-sm rounded-sm border border-gray-300 text-sm rounded-xs placeholder:text-gray-500
+                              focus:outline-none focus:ring-0"
+                              value={description}
+                              onChange={(e) => setDescription(e.target.value)}
+                    ></textarea>
+
+                    <div className="w-full">
+                        <DataTable ref={tableRef} initialData={initialData} />
+                    </div>
+
+                    <div className="w-full">
+                        <div className="mb-0.5 mt-1">
+                            <span
+                                className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">执行结果</span>
+                        </div>
+                        {/*<textarea placeholder="调试输出"*/}
+                        {/*          className="w-full h-28 bg-white shadow-sm rounded-sm border border-gray-300 text-sm rounded-xs placeholder:text-gray-500*/}
+                        {/*  focus:outline-none focus:ring-0"*/}
+                        {/*          value={description}*/}
+                        {/*          onChange={(e) => setDescription(e.target.value)}*/}
+                        {/*></textarea>*/}
+                        <span>xxx</span>
+                    </div>
+
+
+                </div>
             </div>
-            <div className="pl-4 mt-1 overflow-y-auto h-screen w-1/2 text-xs mb-0.5">
-
-                <div className="flex justify-end gap-2">
-                    {/*<div className="flex w-32 gap-2">*/}
-                    <button
-                        onClick={handleSubmit}
-                        className="bg-blue-400 hover:bg-blue-500 text-white text-sm px-4 py-0.5 rounded-sm my-1 mx-1"
-                    >
-                        提交
-                    </button>
-                    <button
-                        onClick={() => router.push('/dashboard/processes')}
-                        className="ml-1 bg-blue-400 hover:bg-blue-500 text-white text-sm px-4 py-0.5 rounded-sm my-1 mx-2"
-                    >
-                        取消
-                    </button>
-                    <button
-                        onClick={() => router.push('/dashboard/processes')}
-                        className="ml-1 bg-blue-400 hover:bg-blue-500 text-white text-sm px-4 py-0.5 rounded-sm my-1 mx-2"
-                    >
-                        调试
-                    </button>
-                    {/*</div>*/}
-
-                </div>
-                <div className="mb-0.5">
-                    <span className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">标题</span>
-                    <span className="text-xs">*</span>
-                </div>
-                <input
-                    className="w-full text-xs rounded-sm shadow-sm mb-[6px] border border-gray-300 placeholder:text-gray-500"
-                    placeholder="请填写流程标题"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <div className="mb-0.5 mt-1">
-                    <span className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">流程描述</span>
-                    <span className="text-xs">*</span>
-                </div>
-                <textarea placeholder="请填写子流程描述"
-                          className="w-full h-28 bg-white shadow-sm rounded-sm border border-gray-300 text-sm rounded-xs placeholder:text-gray-500
-                          focus:outline-none focus:ring-1 focus:ring-blue-500"
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
-
-                <div className="w-full">
-                    <DataTable ref={tableRef} initialData={initialData} />
-                </div>
-
-
-                {/*<DynamicForm ref={dynamicFormRef_in} title="入参信息" initialRows={[]}/>*/}
-                {/*<DynamicForm ref={dynamicFormRef_out} title="出参信息" initialRows={[]}/>*/}
-                <div className="mb-0.5 mt-1">
-                    <span className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">执行结果</span>
-                </div>
-                <textarea placeholder="调试输出"
-                          className="w-full h-28 bg-white shadow-sm rounded-sm border border-gray-300 text-sm rounded-xs placeholder:text-gray-500
-                          focus:outline-none focus:ring-0"
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
-
-            </div>
-        </div>
         </div>
     );
 }
