@@ -1,3 +1,6 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/babel", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    // Add any rules you want here
+  }
 }

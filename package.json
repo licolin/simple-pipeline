@@ -58,6 +58,7 @@
     "tailwindcss": "3.3.3",
     "use-debounce": "^9.0.4",
     "use-onclickoutside": "^0.4.1",
+    "vscode-languageserver-types": "^3.17.5",
     "zod": "^3.22.2"
   },
   "devDependencies": {
@@ -68,11 +69,13 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.2.14",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@typescript-eslint/eslint-plugin": "^8.24.1",
+    "@typescript-eslint/parser": "^8.24.1",
     "@vercel/style-guide": "^5.0.1",
     "css-loader": "^7.1.2",
     "dotenv": "^16.3.1",
-    "eslint": "^8.52.0",
-    "eslint-config-next": "^14.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.24",
     "eslint-config-prettier": "9.0.0",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "0.5.4",

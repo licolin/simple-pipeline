@@ -1,5 +1,5 @@
 "use client";
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {CodeEditor,CodeEditorHandle } from "@/app/ui/process/CodeCreate";
 import DynamicForm, { DynamicFormHandle } from "@/app/ui/process/ParamsForm";
 import {useSession} from "next-auth/react";
@@ -9,7 +9,7 @@ import  TableData from "@/app/ui/process/ParamsTable";
 // import { DataTable } from 'primereact/datatable';
 import DataTable from "@/app/ui/process/ParamsTable";
 import dynamic from "next/dynamic";
-// import MonacoEditor from "@/app/components/ui/MonacoEditor";
+import MonacoEditor from "@/app/components/ui/MonacoEditor";
 
 const ME = dynamic(() => import("@/app/components/ui/MonacoEditor"), {
     ssr: false,
@@ -17,7 +17,6 @@ const ME = dynamic(() => import("@/app/components/ui/MonacoEditor"), {
 
 const initialData = {
     in: [
-
     ],
     out: [
     ]
@@ -39,6 +38,7 @@ export default function Page() {
     const dynamicFormRef_in = useRef<DynamicFormHandle>(null);
     const dynamicFormRef_out = useRef<DynamicFormHandle>(null);
     const codeEditorRef = useRef<CodeEditorHandle>(null);
+    const [codeSessionId,setCodeSessionId] = useState(null);
     const {data: session, status} = useSession();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -49,6 +49,57 @@ export default function Page() {
     const [code,setCode] = useState('');
 
     const router = useRouter();
+
+    useEffect(() => {
+        // Function to fetch session ID
+        const fetchSession = async () => {
+            try {
+                const response = await fetch('/api/pyright/session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create session');
+                }
+
+                const data = await response.json();
+                // Assuming the session ID is returned in a field named 'sessionId'
+                setCodeSessionId(data.sessionId);
+            } catch (error) {
+                console.error('Failed to fetch session:', error);
+                // Optionally, you might want to set a fallback state or show an error to the user
+            }
+        };
+
+        // Fetch session when component mounts
+        fetchSession().then(r => {console.log("fetchSession")});
+
+        // Cleanup function to close the session when the component unmounts
+        return () => {
+            if (codeSessionId) {
+                // Function to close session
+                const closeSession = async () => {
+                    try {
+                        const response = await fetch(`/api/pyright/session/${codeSessionId}`, {
+                            method: 'DELETE',
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to close session');
+                        }
+                    } catch (error) {
+                        console.error('Failed to close session:', error);
+                    }
+                };
+
+                closeSession().then(r => {console.log("closeSession")});
+            }
+        };
+    }, []);
+
 
 
     function openDialog(msg:string,status:boolean,showOrNot:boolean){
@@ -140,7 +191,7 @@ export default function Page() {
                     {/*<MonacoEditor*/}
                     {/*    value="// 在此编写您的代码..."*/}
                     {/*    language="python"*/}
-                    {/*    onChange={handleCodeChange}*/}
+                    {/*    // onChange={handleCodeChange}*/}
                     {/*/>*/}
                     <ME handleChange={handleEditorChange} />
 
