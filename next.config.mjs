@@ -24,6 +24,7 @@ const nextConfig = {
                         'html',
                         'scss',
                         'less',
+                        'python',
                     ],
                     filename: 'static/[name].worker.js',
                 })

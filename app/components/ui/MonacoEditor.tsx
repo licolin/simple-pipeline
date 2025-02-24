@@ -4,9 +4,10 @@ import Editor from '@monaco-editor/react';
 interface MonacoEditorProps {
     handleChange: (value: string | undefined, event: any) => void;
     // sessionId as a parameter for Monaco component
+    sessionId: string;
 }
 
-const MonacoEditor: React.FC<MonacoEditorProps> = ({ handleChange }) => {
+const MonacoEditor: React.FC<MonacoEditorProps> = ({ handleChange,sessionId }) => {
     const editorRef = useRef<HTMLDivElement | null>(null);
     const [editorHeight, setEditorHeight] = useState<string>('600px'); // 默认高度
 

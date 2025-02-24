@@ -1,44 +1,44 @@
 "use client";
 import {useEffect, useRef, useState} from 'react';
-import {CodeEditor,CodeEditorHandle } from "@/app/ui/process/CodeCreate";
-import DynamicForm, { DynamicFormHandle } from "@/app/ui/process/ParamsForm";
+import {CodeEditor, CodeEditorHandle} from "@/app/ui/process/CodeCreate";
+import DynamicForm, {DynamicFormHandle} from "@/app/ui/process/ParamsForm";
 import {useSession} from "next-auth/react";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import Dialog from "@/app/ui/Dialog";
-import  TableData from "@/app/ui/process/ParamsTable";
+import TableData from "@/app/ui/process/ParamsTable";
 // import { DataTable } from 'primereact/datatable';
 import DataTable from "@/app/ui/process/ParamsTable";
 import dynamic from "next/dynamic";
-import MonacoEditor from "@/app/components/ui/MonacoEditor";
+// import MonacoEditor from "@/app/components/ui/MonacoEditor";
+import MonacoEditor from '@/app/components/ui/editor';
 
-const ME = dynamic(() => import("@/app/components/ui/MonacoEditor"), {
-    ssr: false,
-});
+
+// const ME = dynamic(() => import("@/app/components/ui/MonacoEditor"), {
+//     ssr: false,
+// });
 
 const initialData = {
-    in: [
-    ],
-    out: [
-    ]
+    in: [],
+    out: []
 };
 
 const initialData1 = {
     in: [
-        { name: 'param1', value: 'value1' },
-        { name: 'param2', value: 'value2' }
+        {name: 'param1', value: 'value1'},
+        {name: 'param2', value: 'value2'}
     ],
     out: [
-        { name: 'paramA', value: 'valueA' },
-        { name: 'paramB', value: 'valueB' }
+        {name: 'paramA', value: 'valueA'},
+        {name: 'paramB', value: 'valueB'}
     ]
 };
 
 export default function Page() {
     const tableRef = useRef<any>(null);
-    const dynamicFormRef_in = useRef<DynamicFormHandle>(null);
-    const dynamicFormRef_out = useRef<DynamicFormHandle>(null);
-    const codeEditorRef = useRef<CodeEditorHandle>(null);
-    const [codeSessionId,setCodeSessionId] = useState(null);
+    const dynamicFormRef_in = useRef<DynamicFormHandle | null>(null);
+    const dynamicFormRef_out = useRef<DynamicFormHandle | null>(null);
+    const codeEditorRef = useRef<CodeEditorHandle|null>(null);
+    const [codeSessionId, setCodeSessionId] = useState(null);
     const {data: session, status} = useSession();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -46,99 +46,105 @@ export default function Page() {
     const [showDialog, setShowDialog] = useState(false);
     const [dialogMessage, setDialogMessage] = useState('');
     const [dialogSuccess, setDialogSuccess] = useState(false);
-    const [code,setCode] = useState('');
+    // const [code, setCode] = useState('');
+    const [code, setCode] = useState('# Start coding here\n');
 
     const router = useRouter();
 
-    useEffect(() => {
-        // Function to fetch session ID
-        const fetchSession = async () => {
-            try {
-                const response = await fetch('/api/pyright/session', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+    // useEffect(() => {
+    //     // Function to fetch session ID
+    //     const fetchSession = async () => {
+    //         try {
+    //             const response = await fetch('/api/pyright/session', {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //             });
+    //
+    //             if (!response.ok) {
+    //                 throw new Error('Failed to create session');
+    //             }
+    //
+    //             const data = await response.json();
+    //             // Assuming the session ID is returned in a field named 'sessionId'
+    //             setCodeSessionId(data.sessionId);
+    //         } catch (error) {
+    //             console.error('Failed to fetch session:', error);
+    //             // Optionally, you might want to set a fallback state or show an error to the user
+    //         }
+    //     };
+    //
+    //     // Fetch session when component mounts
+    //     fetchSession().then(r => {
+    //         console.log("fetchSession")
+    //     });
+    //
+    //     // Cleanup function to close the session when the component unmounts
+    //     return () => {
+    //         if (codeSessionId) {
+    //             // Function to close session
+    //             const closeSession = async () => {
+    //                 try {
+    //                     const response = await fetch(`/api/pyright/session/${codeSessionId}`, {
+    //                         method: 'DELETE',
+    //                     });
+    //
+    //                     if (!response.ok) {
+    //                         throw new Error('Failed to close session');
+    //                     }
+    //                 } catch (error) {
+    //                     console.error('Failed to close session:', error);
+    //                 }
+    //             };
+    //
+    //             closeSession().then(r => {
+    //                 console.log("closeSession")
+    //             });
+    //         }
+    //     };
+    // }, []);
+    //
+    // console.log("codeSessionId is " + codeSessionId)
 
-                if (!response.ok) {
-                    throw new Error('Failed to create session');
-                }
 
-                const data = await response.json();
-                // Assuming the session ID is returned in a field named 'sessionId'
-                setCodeSessionId(data.sessionId);
-            } catch (error) {
-                console.error('Failed to fetch session:', error);
-                // Optionally, you might want to set a fallback state or show an error to the user
-            }
-        };
-
-        // Fetch session when component mounts
-        fetchSession().then(r => {console.log("fetchSession")});
-
-        // Cleanup function to close the session when the component unmounts
-        return () => {
-            if (codeSessionId) {
-                // Function to close session
-                const closeSession = async () => {
-                    try {
-                        const response = await fetch(`/api/pyright/session/${codeSessionId}`, {
-                            method: 'DELETE',
-                        });
-
-                        if (!response.ok) {
-                            throw new Error('Failed to close session');
-                        }
-                    } catch (error) {
-                        console.error('Failed to close session:', error);
-                    }
-                };
-
-                closeSession().then(r => {console.log("closeSession")});
-            }
-        };
-    }, []);
-
-
-
-    function openDialog(msg:string,status:boolean,showOrNot:boolean){
+    function openDialog(msg: string, status: boolean, showOrNot: boolean) {
         setDialogMessage(msg);
         setDialogSuccess(status);
         setShowDialog(showOrNot);
     }
 
-    const handleEditorChange = (value: string | undefined, event: any) => {
-        console.log('Editor content:', value);
-    };
+    // const handleEditorChange = (value: string | undefined, event: any) => {
+    //     console.log('Editor content:', value);
+    // };
 
     const handleSubmit = async () => {
         if (!title || title.trim() === "") {
-            openDialog("脚本名称不能为空",false,true);
+            openDialog("脚本名称不能为空", false, true);
             return;
         }
-        if (!codeEditorRef.current?.getCode() || codeEditorRef.current.getCode().trim() === "") {
-            openDialog("脚本内容不能为空",false,true);
-            return;
-        }
+        // if (!codeEditorRef.current?.getCode() || codeEditorRef.current.getCode().trim() === "") {
+        //     openDialog("脚本内容不能为空", false, true);
+        //     return;
+        // }
         if (!description || description.trim() === "") {
-            openDialog("脚本描述不能为空",false,true);
+            openDialog("脚本描述不能为空", false, true);
             return;
         }
 
 
         const formData = {
             script_name: title,
-            script_content:codeEditorRef.current?.getCode()||"",
+            script_content: codeEditorRef.current?.getCode() || "",
             script_params_in: dynamicFormRef_in.current?.getData() || [],
             script_params_out: dynamicFormRef_out.current?.getData() || [],
-            script_description:description,
+            script_description: description,
         };
 
         // const params = {in:formData.script_params_in,out:formData.script_params_out}
         const params = tableRef.current.getData() || initialData;
         console.log(params);
-        console.log("session user email info "+session?.user?.email);
+        console.log("session user email info " + session?.user?.email);
         // const id:string = `1`;
         try {
             const response = await fetch('/api/process', {
@@ -149,23 +155,23 @@ export default function Page() {
                 body: JSON.stringify({
                     script_name: formData.script_name,
                     script_content: formData.script_content, // Convert age to an integer
-                    script_params:params,
-                    script_description:formData.script_description,
-                    create_user:session?.user?.email,
+                    script_params: params,
+                    script_description: formData.script_description,
+                    create_user: session?.user?.email,
                 }),
             });
 
             const result = await response.json();
             if (result.success) {
                 console.log('Data submitted successfully:', result.data);
-                openDialog("提交成功",true,true);
+                openDialog("提交成功", true, true);
             } else {
                 console.error('Submission failed:', result.error);
-                openDialog('提交失败: ' + result.error,false,true);
+                openDialog('提交失败: ' + result.error, false, true);
             }
         } catch (error) {
             console.error('An error occurred:', error);
-            openDialog('错误信息: ' + error,false,true);
+            openDialog('错误信息: ' + error, false, true);
         }
 
     };
@@ -183,7 +189,8 @@ export default function Page() {
             <div className="mt-2 flex h-screen w-full">
                 <div className="h-screen w-1/2">
                     <div className="mb-0.5">
-                        <span className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">代码编辑区</span>
+                        <span
+                            className="border-l-[3px] border-indigo-600 h-5 text-xs font-bold pl-[6px]">代码编辑区</span>
                         <span className="text-xs">*</span>
                     </div>
                     {/*<span className="text-xs font-semibold">代码编辑区</span>*/}
@@ -193,8 +200,8 @@ export default function Page() {
                     {/*    language="python"*/}
                     {/*    // onChange={handleCodeChange}*/}
                     {/*/>*/}
-                    <ME handleChange={handleEditorChange} />
-
+                    {/*<ME handleChange={handleEditorChange} sessionId={codeSessionId}/>*/}
+                    <MonacoEditor value={code} onChange={setCode} />
 
                 </div>
                 <div className="pl-4 mt-1 h-screen w-1/2 text-xs mb-0.5 mx-1">
@@ -248,7 +255,7 @@ export default function Page() {
                     ></textarea>
 
                     <div className="w-full">
-                        <DataTable ref={tableRef} initialData={initialData} />
+                        <DataTable ref={tableRef} initialData={initialData}/>
                     </div>
 
                     <div className="w-full">
