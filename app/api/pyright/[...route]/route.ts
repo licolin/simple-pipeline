@@ -27,7 +27,7 @@ export async function POST(req: NextRequest, { params }: { params: { route: stri
 
 export async function DELETE(req: NextRequest, { params }: { params: { route: string[] } }) {
     const [endpoint, ...rest] = params.route;
-    const PYRIGHT_URL = process.env.PYRIGHT_URL || 'http://localhost:5000';
+    const PYRIGHT_URL = process.env.PYRIGHT_URL || 'http://localhost:5000/api';
 
     const url = `${PYRIGHT_URL}/${endpoint}${
         rest.length ? `/${rest.join('/')}` : ''
