@@ -2,6 +2,7 @@
 import FlowComponent from "@/app/ui/pipeline/create/flow";
 import {NodeEdge} from "@/app/lib/definitions";
 import {fetchNodeEdge} from "@/app/lib/data";
+import FlowChart from "@/app/ui/dashboard/Flow";
 
 type Node = {
     id: string;
@@ -31,11 +32,10 @@ export default async function Page({params}: { params: { id: string } }) {
         }
     });
 
-    // console.log("init_nodes is "+JSON.stringify(init_nodes));
-
     return (
         <div>
-            <FlowComponent id={id} node={init_nodes} edge={init_edges} allParams={init_allParams}/>
+            {/*<FlowComponent id={id} node={init_nodes} edge={init_edges} allParams={init_allParams}/>*/}
+            <FlowChart />
         </div>
     )
 

@@ -25,3 +25,10 @@ body {
     text-wrap: balance;
   }
 }
+
+@font-face {
+  font-family: 'YourChineseFont';
+  src: url('/fonts/Alibaba-PuHuiTi-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

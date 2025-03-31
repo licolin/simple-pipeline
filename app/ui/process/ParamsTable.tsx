@@ -1,7 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
-
-// Define the types for the input/output parameter structure
 interface Param {
     name: string;
     value: string;
@@ -18,7 +16,6 @@ interface DataTableProps {
 
 const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTableProps, ref) => {
     const [data, setData] = useState<TableData>(initialData);
-
     useImperativeHandle(ref, () => ({
         getData: () => data
     }));
@@ -29,15 +26,9 @@ const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTablePr
     };
 
     const handleSelectChange = (type: 'in' | 'out', index: number, selectedValue: string) => {
-
         console.log("change or not? "+type);
-        // Clone the current params and find the param being changed
         const currentParam = data[type][index];
-
-        // Remove the param from the current list (either 'in' or 'out')
         const updatedParams = data[type].filter((_, i) => i !== index);
-
-        // Add the param to the opposite list (either 'in' or 'out')
         const newType = selectedValue === 'in' ? 'in' : 'out';
         setData(prevData => ({
             ...prevData,
@@ -47,8 +38,6 @@ const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTablePr
 
         console.log("data info "+JSON.stringify(data));
     };
-
-
     const renderRows = (params: Param[], type: 'in' | 'out') => {
         return params.map((item, index) => (
             <tr key={`${type}-${index}`} className="border-b-[1px] border-gray-300 bg-white">
@@ -90,7 +79,6 @@ const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTablePr
                             }));
                         }}
                     >
-                        {/*删除*/}
                         <TrashIcon className="h-5 w-5 text-blue-500 hover:text-blue-700"/>
                     </button>
                 </td>
@@ -112,8 +100,6 @@ const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTablePr
                     +添加参数
                 </span>
             </div>
-
-            {/* Table header */}
             <table className="text-xs w-full table-fixed">
                 <thead className="bg-gray-200 h-5">
                 <tr>
@@ -124,13 +110,10 @@ const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTablePr
                 </tr>
                 </thead>
             </table>
-
             <div className="overflow-y-auto h-40">
                 <table className="text-xs text-center w-full table-fixed">
                     <tbody>
-                    {/* Render input parameters (入参) */}
                     {renderRows(data.in, 'in')}
-                    {/* Render output parameters (出参) */}
                     {renderRows(data.out, 'out')}
                     </tbody>
                 </table>
@@ -138,5 +121,4 @@ const DataTable = forwardRef(({ initialData = { in: [], out: [] } }: DataTablePr
         </div>
     );
 });
-
 export default DataTable;

@@ -13,6 +13,7 @@ export default function MonacoEditor({ value, onChange }: MonacoEditorProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const sessionIdRef = useRef<string | null>(null);
 
+    console.log("reload or not ?");
     useEffect(() => {
         if (!containerRef.current) return;
 
@@ -26,11 +27,13 @@ export default function MonacoEditor({ value, onChange }: MonacoEditorProps) {
 
         // 创建 Pyright 会话
         const initializeSession = async () => {
+            console.log("Initializing");
             const response = await fetch('/api/pyright/session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             });
             const { sessionId } = await response.json();
+            console.log("request session id is " + sessionId);
             sessionIdRef.current = sessionId;
 
             // 设置初始内容
@@ -53,7 +56,7 @@ export default function MonacoEditor({ value, onChange }: MonacoEditorProps) {
             provideCompletionItems: async (model, position) => {
                 if (!sessionIdRef.current) return { suggestions: [] };
 
-                console.log("line "+position.lineNumber + ": character" + position.column);
+                console.log("line "+position.lineNumber + ": character " + position.column);
                 const response = await fetch(
                     `/api/pyright/session/${sessionIdRef.current}/completion`,
                     {
@@ -61,17 +64,20 @@ export default function MonacoEditor({ value, onChange }: MonacoEditorProps) {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             position:{
-                                line: position.lineNumber,
-                                character: position.column,
+                                line: position.lineNumber -1,
+                                character: position.column-1,
                             },
                             code: model.getValue(),
                         }),
                     }
                 );
+                console.log("response is "+JSON.stringify(response));
                 const data = await response.json();
 
                 // 从返回数据中提取 completionList
                 const completionList = data.completionList || {};
+
+                console.log("completionList is "+JSON.stringify(completionList));
                 const items = !Array.isArray(completionList.items) ? [] : completionList.items;
 
                 // 转换为 Monaco Editor 期望的补全项格式
@@ -102,13 +108,14 @@ export default function MonacoEditor({ value, onChange }: MonacoEditorProps) {
             if (sessionIdRef.current) {
                 fetch(`/api/pyright/session/${sessionIdRef.current}`, {
                     method: 'DELETE',
-                });
+                }).then(r => console.log("delete session")).catch(err=>console.error("error deleting session "+err));
             }
             editorRef.current?.dispose();
         };
     }, []);
 
     const updateDiagnostics = async (content: string) => {
+        console.log("sessionIdRef.current "+sessionIdRef.current);
         if (!sessionIdRef.current || !editorRef.current) return;
 
         console.log("content "+content);

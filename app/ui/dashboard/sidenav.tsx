@@ -22,11 +22,11 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-    {
-        name: '看板',
-        list: [],
-        href: '/dashboard',
-    },
+    // {
+    //     name: '看板',
+    //     list: [],
+    //     href: '/dashboard',
+    // },
     {
         name: '运维流程',
         href: "",
@@ -48,11 +48,11 @@ const menuItems: MenuItem[] = [
         list: [],
         href: '/dashboard/management',
     },
-    {
-        name: '代码生成',
-        list: [],
-        href: '/dashboard/chat',
-    },
+    // {
+    //     name: '代码生成',
+    //     list: [],
+    //     href: '/dashboard/chat',
+    // },
     // {
     //     name: '文件管理',
     //     href: "",

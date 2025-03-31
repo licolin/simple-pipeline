@@ -23,6 +23,10 @@ const config: Config = {
           600: '#2F6FEB',
         },
       },
+      fontFamily: {
+        sans: ['YourChineseFont', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        custom: ['YourChineseFont', 'sans-serif'],
+      },
     },
     keyframes: {
       shimmer: {

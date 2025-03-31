@@ -27,7 +27,7 @@ export async function DELETE(request: Request, { params }: { params: { sid: stri
     const { sid } = params;
 
     try {
-        const response = await fetch(`http://localhost:5000/session/${sid}`, {
+        const response = await fetch(`http://localhost:5000/api/session/${sid}`, {
             method: 'DELETE',
         });
 

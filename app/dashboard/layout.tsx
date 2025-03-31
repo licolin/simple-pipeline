@@ -31,7 +31,7 @@ export default function Layout({ children }: LayoutProps) {
                             />
                         </div>
 
-                        <div className={`h-screen overflow-hidden pt-10 transition-all duration-300 ease-in-out ml-20 md:pl-2`}>
+                        <div className={`h-screen overflow-hidden pt-10 transition-all duration-300 ease-in-out ml-16 md:pl-2`}>
                             {children}
                             {/*md:pl-4*/}
                         </div>
