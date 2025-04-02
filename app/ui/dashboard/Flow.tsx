@@ -51,6 +51,14 @@ const availableNodes: NodeType[] = [
         ],
     },
     { id: '2', label: '节点2' },
+    {
+        id: '3',
+        label: '节点3',
+        children: [
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+        ],
+    },
 ];
 
 // const handleDragStart = (event: React.DragEvent<HTMLDivElement>, node: Node) => {

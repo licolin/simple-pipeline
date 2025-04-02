@@ -33,8 +33,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ availableNodes, onDragStart
             return (
                 <div key={menuId} className="relative">
                     <div
-                        className={`font-custom bg-white border rounded p-[1px] text-left shadow hover:bg-gray-200 flex justify-between items-center ${
-                            hasChildren ? 'text-blue-500 text-sm cursor-pointer' : 'text-black text-sm cursor-move'
+                        className={`font-custom border-2 border-solid border-sky-300 rounded p-[1px] text-left shadow hover:bg-gray-200 flex justify-between items-center ${
+                            hasChildren ? 'bg-white text-blue-500 text-sm cursor-pointer' : 'bg-sky-200 text-black text-sm cursor-move'
                         }`}
                         draggable={!hasChildren}
                         onDragStart={(event) => onDragStart(event, node)}
@@ -58,7 +58,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ availableNodes, onDragStart
                         )}
                     </div>
                     {hasChildren && isOpen && (
-                        <div className="ml-1 mt-[1px]">
+                        <div className={`ml-1 mt-[1px]`} >
                             {renderMenuItems(node.children, `${menuId}-`)}
                         </div>
                     )}
