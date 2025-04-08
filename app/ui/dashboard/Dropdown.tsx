@@ -33,7 +33,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ availableNodes, onDragStart
             return (
                 <div key={menuId} className="relative">
                     <div
-                        className={`font-custom border-2 border-solid border-sky-300 rounded p-[1px] text-left shadow hover:bg-gray-200 flex justify-between items-center ${
+                        className={`font-custom border-[1px] border-solid border-sky-300 rounded p-[1px] text-left shadow hover:bg-gray-200 flex justify-between items-center ${
                             hasChildren ? 'bg-white text-blue-500 text-sm cursor-pointer' : 'bg-sky-200 text-black text-sm cursor-move'
                         }`}
                         draggable={!hasChildren}
@@ -68,8 +68,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ availableNodes, onDragStart
     };
 
     return (
-        <div className="w-48 bg-gray-100">
-            <div className="w-full bg-gray-100 shadow-md rounded">
+        <div className="w-48 bg-gray-100 h-[350px]">
+            <div className="w-full h-full bg-gray-100 shadow-md rounded overflow-y-auto">
                 {renderMenuItems(availableNodes)}
             </div>
         </div>

@@ -59,6 +59,42 @@ const availableNodes: NodeType[] = [
             { id: '3-2', label: '子节点3-2' },
         ],
     },
+    {
+        id: '4',
+        label: '节点6',
+        children: [
+            { id: '4-1', label: '子节点4-1' },
+            { id: '4-2', label: '子节点4-2' },
+            { id: '4-1', label: '子节点4-1' },
+            { id: '4-2', label: '子节点4-2' },
+        ],
+    },
+    {
+        id: '5',
+        label: '节点7',
+        children: [
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+        ],
+    },
+    {
+        id: '6',
+        label: '节点7',
+        children: [
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+            { id: '3-1', label: '子节点3-1' },
+            { id: '3-2', label: '子节点3-2' },
+        ],
+    },
+
+
 ];
 
 // const handleDragStart = (event: React.DragEvent<HTMLDivElement>, node: Node) => {
@@ -126,35 +162,12 @@ function FlowChartComponent() {
     }, [edges]);
 
     return (
-        <div className="flex w-full h-screen">
-            {/*<div className="w-48 bg-gray-100">*/}
-            {/*    <button*/}
-            {/*        className="w-full bg-indigo-400 text-white py-2 px-2 text-sm rounded flex items-center justify-between"*/}
-            {/*        onClick={() => setIsOpen(!isOpen)}*/}
-            {/*    >*/}
-            {/*        <span>可拖拽节点</span>*/}
-            {/*        {isOpen ? <MdKeyboardArrowUp size={20}/> : <MdKeyboardArrowDown size={20}/>}*/}
-            {/*    </button>*/}
-            {/*    {isOpen && (*/}
-            {/*        <div className="mt-1 w-full bg-gray-100 shadow-md rounded z-10">*/}
-            {/*            {availableNodes.map((node) => (*/}
-            {/*                <div*/}
-            {/*                    key={node.id}*/}
-            {/*                    className="bg-white border rounded p-1 text-left cursor-move shadow hover:bg-gray-200"*/}
-            {/*                    draggable*/}
-            {/*                    onDragStart={(event) => onDragStart(event, node)}*/}
-            {/*                >*/}
-            {/*                    {node.label}*/}
-            {/*                </div>*/}
-            {/*            ))}*/}
-            {/*        </div>*/}
-            {/*    )}*/}
-            {/*</div>*/}
-            <div>
+        <div className="flex w-full">
+            <div className="h-screen">
                 <div className="font-custom text-sm bg-indigo-400 py-2 px-2 text-white">可拖拽组件信息</div>
                 <DropdownMenu availableNodes={availableNodes} onDragStart={onDragStart} />
             </div>
-            <div className="flex-grow relative rounded" ref={reactFlowWrapper}>
+            <div className="flex-grow relative rounded h-screen" ref={reactFlowWrapper}>
                 <h3 className="text-sm bg-indigo-400 py-2 px-2 text-white">流程图</h3>
                 <div className="w-full h-full">
                     <ReactFlow
